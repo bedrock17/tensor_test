@@ -28,9 +28,15 @@ W2 = tf.Variable(tf.random_normal([256, 256], stddev=0.01))
 # L1 레이어의 출력값에 가중치를 곱하고 ReLU 함수를 이용하여 레이어를 만듭니다.
 L2 = tf.nn.relu(tf.matmul(L1, W2))
 
+W2_2 = tf.Variable(tf.random_normal([256, 256], stddev=0.01))
+L2_2 = tf.nn.relu(tf.matmul(L2, W2_2))
+
+W2_3 = tf.Variable(tf.random_normal([256, 256], stddev=0.01))
+L2_3 = tf.nn.relu(tf.matmul(L2_2, W2_3))
+
 W3 = tf.Variable(tf.random_normal([256, 10], stddev=0.01))
 # 최종 모델의 출력값은 W3 변수를 곱해 10개의 분류를 가지게 됩니다.
-model = tf.matmul(L2, W3)
+model = tf.matmul(L2_3, W3)
 
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=model, labels=Y))
 optimizer = tf.train.AdamOptimizer(0.001).minimize(cost)
@@ -42,7 +48,7 @@ init = tf.global_variables_initializer()
 sess = tf.Session()
 sess.run(init)
 
-batch_size = 100
+batch_size = 50
 total_batch = int(mnist.train.num_examples / batch_size)
 
 for epoch in range(15):

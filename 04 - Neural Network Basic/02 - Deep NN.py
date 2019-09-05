@@ -26,20 +26,25 @@ Y = tf.placeholder(tf.float32)
 # 첫번째 가중치의 차원은 [특성, 히든 레이어의 뉴런갯수] -> [2, 10] 으로 정합니다.
 W1 = tf.Variable(tf.random_uniform([2, 10], -1., 1.))
 # 두번째 가중치의 차원을 [첫번째 히든 레이어의 뉴런 갯수, 분류 갯수] -> [10, 3] 으로 정합니다.
-W2 = tf.Variable(tf.random_uniform([10, 3], -1., 1.))
+W2 = tf.Variable(tf.random_uniform([10, 10], -1., 1.))
+W3 = tf.Variable(tf.random_uniform([10, 3], -1., 1.))
 
 # 편향을 각각 각 레이어의 아웃풋 갯수로 설정합니다.
 # b1 은 히든 레이어의 뉴런 갯수로, b2 는 최종 결과값 즉, 분류 갯수인 3으로 설정합니다.
 b1 = tf.Variable(tf.zeros([10]))
-b2 = tf.Variable(tf.zeros([3]))
+b2 = tf.Variable(tf.zeros([10]))
+b3 = tf.Variable(tf.zeros([3]))
 
 # 신경망의 히든 레이어에 가중치 W1과 편향 b1을 적용합니다
 L1 = tf.add(tf.matmul(X, W1), b1)
 L1 = tf.nn.relu(L1)
 
+L2 = tf.add(tf.matmul(L1, W2), b2)
+L2 = tf.nn.relu(L2)
+
 # 최종적인 아웃풋을 계산합니다.
 # 히든레이어에 두번째 가중치 W2와 편향 b2를 적용하여 3개의 출력값을 만들어냅니다.
-model = tf.add(tf.matmul(L1, W2), b2)
+model = tf.add(tf.matmul(L2, W3), b3)
 
 # 텐서플로우에서 기본적으로 제공되는 크로스 엔트로피 함수를 이용해
 # 복잡한 수식을 사용하지 않고도 최적화를 위한 비용 함수를 다음처럼 간단하게 적용할 수 있습니다.
